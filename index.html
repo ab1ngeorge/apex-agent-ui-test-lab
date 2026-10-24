@@ -1,213 +1,16 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Atlas Ops — Agent UI Test Lab</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23425cf5'/%3E%3Ctext x='20' y='28' font-size='26' font-family='Arial' font-weight='bold' text-anchor='middle' fill='white'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23425cf5%22/%3E%3Ctext x=%2232%22 y=%2243%22 font-size=%2238%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22700%22%3EA%3C/text%3E%3C/svg%3E">
 <style>
-:root {
-  --bg:#f4f6fb;
-  --panel:#fff;
-  --ink:#182235;
-  --muted:#718096;
-  --line:#e4e9f2;
-  --blue:#425cf5;
-  --green:#168765;
-  --amber:#b7791f;
-  --red:#c2414b;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-button,input,select { font:inherit; }
-button { cursor:pointer; }
-button:focus-visible,input:focus-visible,select:focus-visible {
-  outline:3px solid #91a0ff;
-  outline-offset:2px;
-}
-button:disabled { opacity:.45;cursor:not-allowed; }
-.app { display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh; }
-.sidebar {
-  background:#121a2b;color:#e7ecf8;padding:22px 14px;
-  display:flex;flex-direction:column;gap:24px;
-}
-.brand { display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800;padding:0 8px; }
-.logo {
-  width:35px;height:35px;border-radius:11px;
-  background:linear-gradient(135deg,#7d8bff,#425cf5);
-  display:grid;place-items:center;color:white;
-}
-.workspace { padding:13px;background:#ffffff0b;border:1px solid #ffffff16;border-radius:12px; }
-.workspace small { display:block;color:#9ba9c2;font-size:10px;margin-bottom:4px; }
-.nav-label { color:#8190aa;font-size:10px;letter-spacing:1.5px;padding:0 10px;margin-bottom:6px; }
-.nav { display:grid;gap:4px; }
-.nav button {
-  border:0;background:transparent;color:#b7c2d8;text-align:left;
-  padding:11px;border-radius:9px;display:flex;gap:10px;align-items:center;
-}
-.nav button:hover,.nav button.active { background:#ffffff15;color:white; }
-.nav .count { margin-left:auto;background:#303c55;padding:1px 7px;border-radius:8px;font-size:11px; }
-.sidebar-bottom { margin-top:auto;border-top:1px solid #ffffff20;padding:16px 6px 0;display:flex;gap:10px;align-items:center; }
-.avatar { width:35px;height:35px;border-radius:50%;background:#f3d7c1;color:#713f2b;display:grid;place-items:center;font-weight:800;flex-shrink:0; }
-.sidebar-bottom small { display:block;color:#9ba9c2; }
-.main { min-width:0; }
-.topbar {
-  height:68px;background:white;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;gap:12px;
-}
-.crumb { color:var(--muted); }
-.crumb b { color:var(--ink); }
-.top-actions { display:flex;align-items:center;gap:9px; }
-.icon-btn {
-  width:38px;height:37px;background:white;border:1px solid var(--line);
-  border-radius:9px;color:#526078;
-}
-.mobile-menu { display:none; }
-.content { max-width:1500px;margin:auto;padding:28px 28px 50px; }
-.eyebrow { font-size:10px;letter-spacing:1.5px;color:var(--blue);font-weight:800; }
-.page-heading { display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin:6px 0 22px; }
-h1 { font-size:28px;letter-spacing:-.7px;margin:0; }
-.page-heading p { color:var(--muted);margin:6px 0 0; }
-.heading-actions { display:flex;gap:8px;flex-wrap:wrap; }
-.btn {
-  border:1px solid var(--line);background:white;color:#334155;
-  border-radius:9px;padding:9px 13px;font-weight:650;
-}
-.btn:hover { background:#f8faff; }
-.btn.primary { background:var(--blue);border-color:var(--blue);color:white; }
-.btn.danger { color:var(--red); }
-.btn.small { padding:6px 9px;font-size:12px; }
-.stats { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px; }
-.stat,.panel { background:white;border:1px solid var(--line);border-radius:13px; }
-.stat { padding:17px; }
-.stat-top { display:flex;justify-content:space-between;color:var(--muted);font-size:12px; }
-.stat-icon { color:var(--blue);background:#edf0ff;border-radius:9px;padding:6px 9px; }
-.stat strong { display:block;font-size:27px;margin:7px 0 1px; }
-.trend { color:var(--green);font-size:11px; }
-.muted { color:var(--muted); }
-.panel { overflow:hidden;margin-bottom:18px; }
-.panel-head {
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:17px 19px;border-bottom:1px solid var(--line);
-}
-.panel-head h2 { font-size:16px;margin:0; }
-.panel-head p { margin:3px 0 0;color:var(--muted);font-size:12px; }
-.tabs { display:flex;gap:4px;padding:0 18px;border-bottom:1px solid var(--line);overflow-x:auto; }
-.tab { border:0;background:none;padding:13px 12px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap; }
-.tab.active { color:var(--blue);border-bottom-color:var(--blue);font-weight:750; }
-.filters { display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:14px 18px; }
-.search { flex:1;min-width:200px; }
-.search input,.filters select {
-  width:100%;padding:10px;border:1px solid var(--line);
-  border-radius:8px;background:white;color:var(--ink);
-}
-.filters select { width:auto;max-width:180px; }
-.table-wrap { overflow-x:auto; }
-table { width:100%;border-collapse:collapse;white-space:nowrap; }
-th {
-  text-align:left;padding:12px 15px;background:#fbfcfe;
-  color:#8994a8;font-size:10px;letter-spacing:.7px;text-transform:uppercase;
-  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-}
-td { padding:13px 15px;border-bottom:1px solid #edf0f5; }
-tbody tr:hover { background:#fafbff; }
-.person { display:flex;align-items:center;gap:9px; }
-.person b { display:block;font-size:13px; }
-.person small { color:var(--muted);font-size:11px; }
-.mini-avatar {
-  width:34px;height:34px;border-radius:10px;background:#e9edff;
-  color:#4658c9;display:grid;place-items:center;font-weight:800;font-size:11px;
-}
-.pill { display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:750; }
-.pill:before { content:"";width:6px;height:6px;border-radius:50%;background:currentColor; }
-.pill.active { color:#13815e;background:#e5f7ef; }
-.pill.review { color:#a36a12;background:#fff4d8; }
-.pill.paused { color:#667085;background:#edf0f5; }
-.pill.blocked { color:#b63844;background:#ffeaec; }
-.row-actions { display:flex;gap:5px; }
-.row-actions button { border:1px solid transparent;background:transparent;color:#526078;border-radius:7px;padding:6px 8px; }
-.row-actions button:hover { border-color:var(--line);background:white; }
-.pagination { display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;font-size:12px;color:var(--muted); }
-.pages { display:flex;gap:5px; }
-.pages button { background:white;border:1px solid var(--line);border-radius:7px;padding:6px 10px; }
-.pages button.current { background:var(--blue);color:white;border-color:var(--blue); }
-.lower-grid { display:grid;grid-template-columns:1.2fr .8fr;gap:18px; }
-.activity { padding:18px; }
-.activity-item { display:flex;gap:11px;margin-bottom:19px; }
-.activity-icon { background:#edf0ff;color:var(--blue);border-radius:9px;padding:7px;height:32px; }
-.activity-item p { margin:0 0 3px; }
-.activity-item small { color:var(--muted);font-size:11px; }
-.progress-wrap { padding:18px; }
-.progress-row { display:flex;justify-content:space-between;margin:15px 0 7px;font-size:12px; }
-.progress { height:7px;border-radius:9px;background:#edf0f5;overflow:hidden; }
-.progress span { display:block;height:100%;background:var(--blue);width:0; }
-.checklist { display:grid;gap:12px;margin-top:18px; }
-.checklist label { display:flex;gap:8px;align-items:center;font-size:12px; }
-.checklist input { accent-color:var(--blue); }
-.empty { padding:35px;text-align:center;color:var(--muted); }
-.toast {
-  display:none;position:fixed;right:22px;bottom:22px;z-index:50;
-  max-width:370px;background:#182235;color:white;padding:13px 17px;
-  border-radius:11px;box-shadow:0 12px 30px #10182835;
-}
-.toast.show { display:block; }
-.toast small { display:block;color:#c5cede;margin-top:3px; }
-.overlay {
-  display:none;position:fixed;inset:0;background:#11182780;z-index:30;
-  align-items:center;justify-content:center;padding:18px;
-}
-.overlay.open { display:flex; }
-.modal {
-  width:min(570px,100%);max-height:90vh;overflow:auto;
-  background:white;border-radius:15px;box-shadow:0 25px 80px #0003;
-}
-.modal-head,.modal-foot { padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px; }
-.modal-head { border-bottom:1px solid var(--line); }
-.modal-head h2 { font-size:18px;margin:0; }
-.modal-body { padding:20px; }
-.modal-foot { justify-content:flex-end;border-top:1px solid var(--line);background:#fbfcfe; }
-.x { border:0;background:#f1f3f8;border-radius:8px;width:32px;height:32px;font-size:20px; }
-.form-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
-.field { display:grid;gap:6px; }
-.field.full { grid-column:1/-1; }
-.field label { font-size:12px;font-weight:700;color:#475569; }
-.field input,.field select {
-  width:100%;border:1px solid #dfe5ef;border-radius:8px;padding:10px;
-}
-.form-error { display:none;background:#fff0f0;color:#b4232c;padding:10px;border-radius:8px;margin-bottom:15px; }
-.detail-list { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
-.detail-list small { display:block;color:var(--muted);font-size:11px; }
-.detail-list b { font-size:13px; }
-@media(max-width:1050px) {
-  .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .lower-grid { grid-template-columns:1fr; }
-}
-@media(max-width:720px) {
-  .app { grid-template-columns:1fr; }
-  .sidebar { display:none; }
-  .mobile-menu { display:inline-block; }
-  .topbar { height:60px;padding:0 12px; }
-  .content { padding:20px 12px; }
-  .page-heading { flex-direction:column; }
-  h1 { font-size:24px; }
-  .stats { gap:8px; }
-  .stat { padding:12px; }
-  .stat strong { font-size:22px; }
-  .filters { padding:12px; }
-  .search { min-width:100%; }
-  .filters select { max-width:100%;flex:1; }
-  .form-grid { grid-template-columns:1fr; }
-  .field.full { grid-column:auto; }
-  .hide-mobile { display:none; }
-  .pagination { flex-wrap:wrap; }
-}
+:root{--bg:#f4f6fb;--panel:#fff;--ink:#182235;--muted:#718096;--line:#e4e9f2;--blue:#425cf5;--blue2:#edf0ff;--green:#168765;--amber:#b7791f;--red:#c2414b;--shadow:0 12px 30px #1b2a4a0b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #91a0ff;outline-offset:2px}
+.app{display:grid;grid-template-columns:238px minmax(0,1fr);min-height:100vh}.sidebar{background:#121a2b;color:#e7ecf8;padding:22px 14px;display:flex;flex-direction:column;gap:24px}.brand{display:flex;align-items:center;gap:11px;padding:0 10px;font-size:17px;font-weight:800;letter-spacing:.2px}.logo{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#7d8bff,#425cf5);display:grid;place-items:center;color:white;font-weight:900}.workspace{margin:0 7px;padding:12px;background:#ffffff0b;border:1px solid #ffffff13;border-radius:12px;color:#b8c3d9}.workspace small{display:block;color:#8997b3;font-size:11px;margin-bottom:4px}.nav-label{font-size:10px;letter-spacing:1.5px;color:#7f8ca7;padding:0 12px;margin-bottom:5px}.nav{display:grid;gap:4px}.nav button{border:0;background:transparent;color:#aeb9d0;text-align:left;padding:11px 12px;border-radius:9px;display:flex;align-items:center;gap:11px}.nav button.active,.nav button:hover{background:#ffffff12;color:white}.nav .count{margin-left:auto;font-size:11px;background:#303c55;padding:2px 7px;border-radius:8px}.sidebar-bottom{margin-top:auto;border-top:1px solid #ffffff16;padding:16px 8px 0;display:flex;gap:10px;align-items:center}.avatar{width:34px;height:34px;border-radius:50%;background:#f3d7c1;color:#713f2b;display:grid;place-items:center;font-weight:800}.sidebar-bottom small{display:block;color:#8f9bb3}.main{min-width:0}.topbar{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;gap:20px}.crumb{color:var(--muted);font-size:13px}.crumb b{color:var(--ink)}.top-actions{display:flex;align-items:center;gap:10px}.icon-btn{height:37px;width:38px;border:1px solid var(--line);border-radius:10px;background:white;color:#56627a;position:relative}.dot{position:absolute;width:7px;height:7px;background:#e35c66;border-radius:50%;right:8px;top:7px}.content{padding:28px 30px 50px;max-width:1500px;margin:auto}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--blue);font-weight:800}.page-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin:5px 0 22px}.page-heading h1{margin:0;font-size:28px;letter-spacing:-.8px}.page-heading p{margin:7px 0 0;color:var(--muted)}.btn{border:1px solid var(--line);border-radius:9px;padding:10px 14px;background:white;color:#334155;font-weight:650;display:inline-flex;align-items:center;gap:8px;justify-content:center}.btn:hover{background:#f8faff}.btn.primary{background:var(--blue);border-color:var(--blue);color:white;box-shadow:0 5px 12px #425cf52b}.btn.primary:hover{background:#3349db}.btn.danger{color:var(--red)}.btn.small{padding:6px 10px;font-size:12px}.btn:disabled{opacity:.45;cursor:not-allowed}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:20px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.stat-icon{width:32px;height:32px;display:grid;place-items:center;background:#f0f3ff;border-radius:10px;color:var(--blue);font-size:17px}.stat strong{font-size:27px;display:block;margin:9px 0 2px;letter-spacing:-.7px}.trend{font-size:12px;color:var(--green)}.muted{color:var(--muted)}.panel{background:white;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}.panel-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:14px}.panel-head h2{font-size:16px;margin:0}.panel-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 20px}.tab{border:0;background:none;padding:14px 13px;color:var(--muted);border-bottom:2px solid transparent;font-weight:650}.tab.active{color:var(--blue);border-bottom-color:var(--blue)}.filters{display:flex;gap:9px;flex-wrap:wrap;padding:16px 20px;align-items:center}.search{position:relative;min-width:220px;flex:1}.search input{width:100%;padding:10px 12px 10px 36px;border:1px solid var(--line);border-radius:9px;background:white}.search span{position:absolute;left:12px;top:9px;color:#8792a8}.filters select{padding:10px 30px 10px 11px;border:1px solid var(--line);border-radius:9px;background:white;color:#4a5568}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap}th{font-size:10px;text-transform:uppercase;letter-spacing:.9px;color:#8994a8;text-align:left;background:#fbfcfe;padding:12px 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}td{padding:14px 18px;border-bottom:1px solid #edf0f5}tbody tr:hover{background:#fafbff}tbody tr:last-child td{border-bottom:0}.person{display:flex;align-items:center;gap:10px}.mini-avatar{width:33px;height:33px;border-radius:10px;background:#e9edff;color:#4658c9;display:grid;place-items:center;font-weight:800;font-size:11px}.person b{display:block;font-size:13px}.person small{color:var(--muted);font-size:11px}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:750}.pill:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}.pill.active{color:#13815e;background:#e5f7ef}.pill.review{color:#a36a12;background:#fff4d8}.pill.paused{color:#667085;background:#edf0f5}.pill.blocked{color:#b63844;background:#ffeaec}.row-actions{display:flex;gap:5px}.row-actions button{border:1px solid transparent;background:transparent;border-radius:7px;color:#65728a;padding:6px 8px}.row-actions button:hover{border-color:var(--line);background:white}.pagination{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.pages{display:flex;gap:5px}.pages button{border:1px solid var(--line);background:white;border-radius:7px;padding:6px 10px}.pages button.current{background:var(--blue);color:white;border-color:var(--blue)}.lower-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,.75fr);gap:18px}.activity{padding:18px 20px}.activity-item{display:flex;gap:12px;padding:0 0 18px;position:relative}.activity-item:not(:last-child):before{content:"";position:absolute;left:15px;top:31px;bottom:0;border-left:1px dashed #dbe1ec}.activity-icon{width:31px;height:31px;border-radius:10px;background:#edf0ff;color:var(--blue);display:grid;place-items:center;z-index:1}.activity-item p{margin:1px 0 4px;font-size:13px}.activity-item small{color:var(--muted);font-size:11px}.progress-wrap{padding:20px}.progress-row{display:flex;justify-content:space-between;margin:15px 0 7px;font-size:12px}.progress{height:7px;border-radius:9px;background:#edf0f5;overflow:hidden}.progress span{display:block;height:100%;border-radius:9px;background:var(--blue)}.checklist{display:grid;gap:12px;margin-top:20px}.checklist label{display:flex;gap:9px;align-items:center;color:#475569;font-size:12px}.checklist input{accent-color:var(--blue)}.toast{position:fixed;right:24px;bottom:24px;background:#182235;color:white;padding:13px 17px;border-radius:11px;box-shadow:0 12px 30px #10182835;z-index:30;display:none;max-width:360px}.toast.show{display:block;animation:pop .2s ease}.toast small{display:block;color:#c5cede;margin-top:3px}@keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}.overlay{display:none;position:fixed;inset:0;background:#11182780;z-index:20;align-items:center;justify-content:center;padding:20px}.overlay.open{display:flex}.modal{background:white;width:min(560px,100%);border-radius:16px;box-shadow:0 25px 80px #0003;overflow:hidden;max-height:90vh;overflow-y:auto}.modal-head{padding:20px 23px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head h2{margin:0;font-size:18px}.x{border:0;background:#f1f3f8;border-radius:8px;width:32px;height:32px;font-size:20px;color:#56627a}.modal-body{padding:22px 23px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:700;color:#475569}.field input,.field select,.field textarea{width:100%;border:1px solid #dfe5ef;border-radius:9px;padding:10px 11px;background:white;color:var(--ink)}.field textarea{min-height:85px;resize:vertical}.helper{font-size:11px;color:var(--muted)}.modal-foot{display:flex;justify-content:flex-end;gap:9px;padding:15px 23px;border-top:1px solid var(--line);background:#fbfcfe}.detail-list{display:grid;grid-template-columns:1fr 1fr;gap:18px}.detail-list small{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}.detail-list b{font-size:13px}.empty{padding:40px;text-align:center;color:var(--muted)}.mobile-menu{display:none}
+@media(max-width:1050px){.app{grid-template-columns:205px minmax(0,1fr)}.content{padding:22px 18px}.topbar{padding:0 18px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.lower-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.app{grid-template-columns:1fr}.sidebar{display:none}.mobile-menu{display:inline-block}.topbar{height:60px;padding:0 14px}.content{padding:20px 12px}.page-heading{flex-direction:column}.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:23px}.stat-top{font-size:11px}.panel-head{padding:15px}.filters{padding:13px}.search{min-width:100%}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top-actions .hide-mobile{display:none}.page-heading h1{font-size:24px}.pagination{gap:12px;flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -215,623 +18,144 @@ tbody tr:hover { background:#fafbff; }
 <aside class="sidebar">
   <div class="brand"><div class="logo">A</div> atlas<span style="color:#8595ff">/</span>ops</div>
   <div class="workspace"><small>WORKSPACE</small><strong>Northstar Studio ▾</strong></div>
-  <div>
-    <div class="nav-label">WORKSPACE</div>
-    <nav class="nav">
-      <button class="active" data-nav="Overview">◫ Overview</button>
-      <button data-nav="Team directory">♙ Team directory <span class="count">24</span></button>
-      <button data-nav="Tasks & approvals">☷ Tasks & approvals <span class="count">6</span></button>
-      <button data-nav="Reports">▥ Reports</button>
-    </nav>
-  </div>
-  <div>
-    <div class="nav-label">MANAGEMENT</div>
-    <nav class="nav">
-      <button data-nav="Integrations">⌘ Integrations</button>
-      <button data-nav="Audit log">◷ Audit log</button>
-      <button data-nav="Settings">⚙ Settings</button>
-    </nav>
-  </div>
-  <div class="sidebar-bottom"><div class="avatar">AG</div><div><strong>Alex Green</strong><small>Workspace admin</small></div></div>
+  <div><div class="nav-label">WORKSPACE</div><nav class="nav">
+    <button class="active" data-nav="Overview"><span>◫</span> Overview</button>
+    <button data-nav="Team directory"><span>♙</span> Team directory <span class="count" id="sidebarMemberCount">8</span></button>
+    <button data-nav="Tasks & approvals"><span>☷</span> Tasks & approvals <span class="count">6</span></button>
+    <button data-nav="Reports"><span>▥</span> Reports</button>
+  </nav></div>
+  <div><div class="nav-label">MANAGEMENT</div><nav class="nav">
+    <button data-nav="Integrations"><span>⌘</span> Integrations</button>
+    <button data-nav="Audit log"><span>◷</span> Audit log</button>
+    <button data-nav="Settings"><span>⚙</span> Settings</button>
+  </nav></div>
+  <div class="sidebar-bottom"><div class="avatar">AG</div><div><strong>Alex Green</strong><small>Workspace admin</small></div><span style="margin-left:auto">⋯</span></div>
 </aside>
-
 <main class="main">
-<header class="topbar">
-  <div style="display:flex;align-items:center;gap:10px">
-    <button class="icon-btn mobile-menu" id="menuBtn" aria-label="Open navigation">☰</button>
-    <div class="crumb">Workspace / <b id="crumbCurrent">Overview</b></div>
-  </div>
-  <div class="top-actions">
-    <span class="muted hide-mobile">Last synced 2 min ago</span>
-    <button class="icon-btn" id="helpBtn" aria-label="Help">?</button>
-    <button class="icon-btn" id="bellBtn" aria-label="Notifications">♧</button>
-    <div class="avatar">AG</div>
-  </div>
-</header>
-
-<div class="content">
-  <div class="eyebrow">WORKSPACE MANAGEMENT</div>
-  <div class="page-heading">
-    <div>
-      <h1 id="pageTitle">Workspace overview</h1>
-      <p id="pageSubtitle">A live snapshot of your team, tasks, and workspace health.</p>
-    </div>
-    <div class="heading-actions">
-      <button class="btn" id="exportBtn">⇩ Export CSV</button>
-      <button class="btn primary" id="addBtn">＋ Add team member</button>
-    </div>
-  </div>
-
-  <section class="stats">
-    <article class="stat"><div class="stat-top">Total team members <span class="stat-icon">♙</span></div><strong id="statMembers">8</strong><div class="trend">↗ Demo directory</div></article>
-    <article class="stat"><div class="stat-top">Active projects <span class="stat-icon">▣</span></div><strong>08</strong><div class="trend">↗ 2 new this week</div></article>
-    <article class="stat"><div class="stat-top">Pending approvals <span class="stat-icon">◷</span></div><strong id="statPending">02</strong><div style="font-size:12px;color:var(--amber)">Needs your attention</div></article>
-    <article class="stat"><div class="stat-top">Workspace health <span class="stat-icon">⌁</span></div><strong>98.4%</strong><div class="trend">↑ All systems operational</div></article>
-  </section>
-
-  <section class="panel">
-    <div class="panel-head">
-      <div><h2>Team directory</h2><p>Manage members, roles, and access permissions.</p></div>
-      <button class="btn small" id="bulkBtn">Bulk pause selected</button>
-    </div>
-    <div class="tabs" role="tablist">
-      <button class="tab active" data-tab="all">All members <span id="allCount">(8)</span></button>
-      <button class="tab" data-tab="active">Active</button>
-      <button class="tab" data-tab="review">Needs review</button>
-      <button class="tab" data-tab="paused">Paused</button>
-    </div>
-    <div class="filters">
-      <div class="search"><input id="searchInput" type="search" placeholder="Search name, email, or role…" aria-label="Search team members"></div>
-      <select id="roleFilter" aria-label="Filter by role">
-        <option value="all">All roles</option>
-        <option>Administrator</option>
-        <option>Project manager</option>
-        <option>Designer</option>
-        <option>Developer</option>
-        <option>Analyst</option>
-      </select>
-      <select id="sortFilter" aria-label="Sort members">
-        <option value="name">Sort: Name A–Z</option>
-        <option value="recent">Sort: Recently added</option>
-        <option value="status">Sort: Status</option>
-      </select>
-      <button class="btn small" id="resetBtn">Reset</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th><input type="checkbox" id="selectAll" aria-label="Select all visible members"></th>
-          <th>Member</th><th>Role</th><th>Status</th><th>Last active</th><th>Actions</th>
-        </tr></thead>
-        <tbody id="memberRows"></tbody>
-      </table>
-    </div>
-    <div class="pagination">
-      <span id="resultSummary">Showing members</span>
-      <div class="pages">
-        <button id="prevPage" aria-label="Previous page">‹</button>
-        <button id="pageOne" class="current">1</button>
-        <button id="pageTwo">2</button>
-        <button id="nextPage" aria-label="Next page">›</button>
-      </div>
-    </div>
-  </section>
-
-  <div class="lower-grid">
+  <header class="topbar"><div style="display:flex;align-items:center;gap:12px"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="Open navigation">☰</button><div class="crumb">Workspace <span style="padding:0 7px">/</span> <b id="crumbCurrent">Overview</b></div></div><div class="top-actions"><span class="muted hide-mobile">Last synced 2 min ago</span><button class="icon-btn" id="helpBtn" aria-label="Help">?</button><button class="icon-btn" id="bellBtn" aria-label="Notifications">♧<i class="dot"></i></button><div class="avatar" style="width:31px;height:31px">AG</div></div></header>
+  <div class="content">
+    <div class="eyebrow">AGENT UI TEST LAB · SAMPLE WORKSPACE</div>
+    <div class="page-heading"><div><h1 id="pageTitle">Workspace overview</h1><p id="pageSubtitle">A live snapshot of your team, tasks, and workspace health.</p></div><div style="display:flex;gap:9px;flex-wrap:wrap"><button class="btn" id="exportBtn">⇩ Export report</button><button class="btn primary" id="addBtn">＋ Add team member</button></div></div>
+    <section class="stats">
+      <article class="stat"><div class="stat-top">Total team members <span class="stat-icon">♙</span></div><strong id="statMembers">8</strong><div class="trend">↗ 12% <span class="muted">vs last month</span></div></article>
+      <article class="stat"><div class="stat-top">Active projects <span class="stat-icon">▣</span></div><strong>08</strong><div class="trend">↗ 2 new <span class="muted">this week</span></div></article>
+      <article class="stat"><div class="stat-top">Pending approvals <span class="stat-icon">◷</span></div><strong id="statPending">06</strong><div style="font-size:12px;color:var(--amber)">Needs your attention</div></article>
+      <article class="stat"><div class="stat-top">Workspace health <span class="stat-icon">⌁</span></div><strong>98.4%</strong><div class="trend">↑ All systems operational</div></article>
+    </section>
     <section class="panel">
-      <div class="panel-head"><div><h2>Recent activity</h2><p>Updates from across your workspace.</p></div><button class="btn small" id="viewActivity">View all</button></div>
-      <div class="activity">
+      <div class="panel-head"><div><h2>Team directory</h2><p>Manage members, roles, and access permissions.</p></div><button class="btn small" id="bulkBtn">Bulk actions ▾</button></div>
+      <div class="tabs" role="tablist"><button class="tab active" data-tab="all" role="tab">All members <span class="muted" id="allCount">(8)</span></button><button class="tab" data-tab="active" role="tab">Active</button><button class="tab" data-tab="review" role="tab">Needs review</button><button class="tab" data-tab="paused" role="tab">Paused</button></div>
+      <div class="filters"><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search name, email, or role…" aria-label="Search team members"></div><select id="roleFilter" aria-label="Filter by role"><option value="all">All roles</option><option>Administrator</option><option>Project manager</option><option>Designer</option><option>Developer</option><option>Analyst</option></select><select id="sortFilter" aria-label="Sort members"><option value="name">Sort: Name A–Z</option><option value="recent">Sort: Recently added</option><option value="status">Sort: Status</option></select><button class="btn small" id="resetBtn">Reset</button></div>
+      <div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="selectAll" aria-label="Select all visible members"></th><th>Member</th><th>Role</th><th>Status</th><th>Last active</th><th>Actions</th></tr></thead><tbody id="memberRows"></tbody></table></div>
+      <div class="pagination"><span id="resultSummary">Showing 5 of 8 matching members · 8 total</span><div class="pages" id="paginationControls"><button id="prevPage" aria-label="Previous page">‹</button><span id="pageNumbers" class="pages" aria-label="Page numbers"></span><button id="nextPage" aria-label="Next page">›</button></div></div>
+    </section>
+    <div class="lower-grid">
+      <section class="panel"><div class="panel-head"><div><h2>Recent activity</h2><p>Updates from across your workspace.</p></div><button class="btn small" id="viewActivity">View all</button></div><div class="activity">
         <div class="activity-item"><div class="activity-icon">＋</div><div><p><b>Priya Sharma</b> invited a new team member</p><small>12 minutes ago · Team directory</small></div></div>
         <div class="activity-item"><div class="activity-icon">✓</div><div><p><b>Marcus Lee</b> completed “Q4 design review”</p><small>48 minutes ago · Project Atlas</small></div></div>
         <div class="activity-item"><div class="activity-icon">⚑</div><div><p><b>Alex Green</b> updated workspace permissions</p><small>2 hours ago · Settings</small></div></div>
-      </div>
-    </section>
-    <section class="panel">
-      <div class="panel-head"><div><h2>Workspace setup</h2><p>Complete your workspace checklist.</p></div></div>
-      <div class="progress-wrap">
-        <div class="progress-row"><span>Setup progress</span><b id="checkProgress">1 of 4</b></div>
-        <div class="progress"><span id="checkBar" style="width:25%"></span></div>
-        <div class="checklist">
-          <label><input class="taskCheck" type="checkbox" checked> Invite your team</label>
-          <label><input class="taskCheck" type="checkbox"> Configure roles</label>
-          <label><input class="taskCheck" type="checkbox"> Connect integrations</label>
-          <label><input class="taskCheck" type="checkbox"> Review workspace settings</label>
-        </div>
-      </div>
-    </section>
+        <div class="activity-item"><div class="activity-icon">↻</div><div><p><b>System</b> completed nightly data sync</p><small>Today, 06:04 AM · Integrations</small></div></div>
+      </div></section>
+      <section class="panel"><div class="panel-head"><div><h2>Workspace checklist</h2><p>Keep your workspace in great shape.</p></div><span class="pill active" id="checkProgress">2 of 4</span></div><div class="progress-wrap"><div class="progress"><span id="checkBar" style="width:50%"></span></div><div class="checklist">
+        <label><input type="checkbox" class="taskCheck" checked> Invite your teammates</label>
+        <label><input type="checkbox" class="taskCheck" checked> Connect your calendar</label>
+        <label><input type="checkbox" class="taskCheck"> Review access permissions</label>
+        <label><input type="checkbox" class="taskCheck"> Configure weekly reports</label>
+      </div></div></section>
+    </div>
   </div>
-</div>
 </main>
 </div>
-
+<div class="overlay" id="memberModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal">
+  <div class="modal-head"><h2 id="modalTitle">Add team member</h2><button class="x" id="closeModal" aria-label="Close dialog">×</button></div>
+  <form id="memberForm" novalidate><div class="modal-body"><div id="formError" role="alert" aria-live="assertive" style="display:none;background:#fff0f1;color:#a52e3a;border:1px solid #ffd4d8;padding:11px 12px;border-radius:9px;margin-bottom:15px;font-size:12px"></div><div class="form-grid">
+    <div class="field"><label for="firstName">First name *</label><input id="firstName" name="firstName" required placeholder="e.g. Jamie"></div>
+    <div class="field"><label for="lastName">Last name *</label><input id="lastName" name="lastName" required placeholder="e.g. Rivera"></div>
+    <div class="field full"><label for="email">Work email *</label><input id="email" name="email" type="email" required placeholder="name@company.com"><span class="helper">Demo only: no email is sent and no external account is created.</span></div>
+    <div class="field"><label for="role">Role *</label><select id="role" name="role" required><option value="">Choose a role</option><option>Administrator</option><option>Project manager</option><option>Designer</option><option>Developer</option><option>Analyst</option></select></div>
+    <div class="field"><label for="status">Initial status</label><select id="status" name="status"><option>Needs review</option><option>Active</option><option>Paused</option></select></div>
+    <div class="field full"><label for="note">Internal note (optional)</label><textarea id="note" name="note" placeholder="Add context for the workspace admins…"></textarea></div>
+    <div class="field full"><label style="display:flex;gap:9px;align-items:center;font-weight:500"><input id="sendInvite" type="checkbox" checked style="width:auto"> Send invitation email (simulated)</label></div>
+  </div></div><div class="modal-foot"><button type="button" class="btn" id="cancelModal">Cancel</button><button type="submit" class="btn primary">Add member</button></div></form>
+</div></div>
+<div class="overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="modal">
+  <div class="modal-head"><h2 id="detailTitle">Member details</h2><button class="x" id="closeDetail" aria-label="Close dialog">×</button></div><div class="modal-body" id="detailBody"></div><div class="modal-foot"><button class="btn" id="detailCloseBtn">Close</button><button class="btn primary" id="editFromDetail">Edit member</button></div>
+</div></div>
+<div class="overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle"><div class="modal" style="max-width:420px"><div class="modal-head"><h2 id="confirmTitle">Confirm action</h2><button class="x" id="closeConfirm" aria-label="Close dialog">×</button></div><div class="modal-body"><p id="confirmText">Are you sure you want to continue?</p></div><div class="modal-foot"><button class="btn" id="cancelConfirm">Cancel</button><button class="btn primary" id="acceptConfirm">Confirm</button></div></div></div>
+<div class="overlay" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportTitle"><div class="modal" style="max-width:850px"><div class="modal-head"><div><h2 id="exportTitle">CSV export preview</h2><p id="exportSummary" class="muted" style="margin:5px 0 0;font-size:12px">Review the filtered rows before downloading.</p></div><button class="x" id="closeExport" aria-label="Close export preview">×</button></div><div class="modal-body"><div id="exportPreviewTable" class="table-wrap"></div><p class="helper" style="margin-top:12px">Filename: <b>atlas-team-directory.csv</b> · Preview shows the exact rows included in the download.</p></div><div class="modal-foot"><button class="btn" id="cancelExport">Cancel</button><button class="btn primary" id="downloadCsvBtn">⇩ Download CSV</button></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<!-- Add/Edit member modal -->
-<div class="overlay" id="memberModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal">
-    <div class="modal-head"><h2 id="modalTitle">Add team member</h2><button class="x" id="closeModal" aria-label="Close">×</button></div>
-    <div class="modal-body">
-      <div class="form-error" id="formError" role="alert"></div>
-      <form id="memberForm" novalidate>
-        <div class="form-grid">
-          <div class="field"><label for="firstName">First name *</label><input id="firstName" name="firstName" required></div>
-          <div class="field"><label for="lastName">Last name *</label><input id="lastName" name="lastName" required></div>
-          <div class="field full"><label for="email">Work email *</label><input id="email" name="email" type="email" required></div>
-          <div class="field"><label for="role">Role *</label><select id="role" name="role" required><option value="">Choose role</option><option>Administrator</option><option>Project manager</option><option>Designer</option><option>Developer</option><option>Analyst</option></select></div>
-          <div class="field"><label for="status">Status</label><select id="status" name="status"><option>Active</option><option>Needs review</option><option>Paused</option></select></div>
-          <div class="field full"><label><input type="checkbox" id="sendInvite" checked> Simulate sending an invitation</label></div>
-        </div>
-      </form>
-      <p class="muted" style="font-size:11px">Demo only: no email is sent and no external account is created.</p>
-    </div>
-    <div class="modal-foot"><button class="btn" id="cancelModal">Cancel</button><button class="btn primary" id="saveMember">Save member</button></div>
-  </div>
-</div>
-
-<!-- Member details modal -->
-<div class="overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
-  <div class="modal">
-    <div class="modal-head"><h2 id="detailTitle">Member details</h2><button class="x" id="closeDetail">×</button></div>
-    <div class="modal-body" id="detailBody"></div>
-    <div class="modal-foot"><button class="btn" id="detailCloseBtn">Close</button><button class="btn primary" id="editFromDetail">Edit member</button></div>
-  </div>
-</div>
-
-<!-- Confirmation modal -->
-<div class="overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
-  <div class="modal">
-    <div class="modal-head"><h2 id="confirmTitle">Confirm action</h2><button class="x" id="closeConfirm">×</button></div>
-    <div class="modal-body"><p id="confirmText"></p></div>
-    <div class="modal-foot"><button class="btn" id="cancelConfirm">Cancel</button><button class="btn primary" id="acceptConfirm">Confirm</button></div>
-  </div>
-</div>
-
-<!-- CSV preview modal -->
-<div class="overlay" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
-  <div class="modal">
-    <div class="modal-head"><h2 id="exportTitle">Export filtered members</h2><button class="x" id="closeExport">×</button></div>
-    <div class="modal-body">
-      <p id="exportSummary" class="muted"></p>
-      <div class="table-wrap" id="exportPreviewTable"></div>
-    </div>
-    <div class="modal-foot"><button class="btn" id="cancelExport">Cancel</button><button class="btn primary" id="downloadCsvBtn">Download CSV</button></div>
-  </div>
-</div>
-
 <script>
-"use strict";
-
-const $ = id => document.getElementById(id);
-
-let members = [
-  {id:1,first:"Sofia",last:"Martinez",email:"sofia.martinez@example.com",role:"Designer",status:"Needs review",lastActive:"Today, 9:12 AM",added:8},
-  {id:2,first:"Ethan",last:"Chen",email:"ethan.chen@example.com",role:"Developer",status:"Needs review",lastActive:"Today, 8:45 AM",added:7},
-  {id:3,first:"Priya",last:"Sharma",email:"priya.sharma@example.com",role:"Administrator",status:"Active",lastActive:"Today, 8:30 AM",added:6},
-  {id:4,first:"Marcus",last:"Lee",email:"marcus.lee@example.com",role:"Project manager",status:"Active",lastActive:"Yesterday",added:5},
-  {id:5,first:"Noah",last:"Williams",email:"noah.williams@example.com",role:"Developer",status:"Active",lastActive:"Yesterday",added:4},
-  {id:6,first:"Olivia",last:"Brown",email:"olivia.brown@example.com",role:"Analyst",status:"Paused",lastActive:"Oct 20, 2026",added:3},
-  {id:7,first:"Ava",last:"Patel",email:"ava.patel@example.com",role:"Designer",status:"Active",lastActive:"Oct 20, 2026",added:2},
-  {id:8,first:"Oliver",last:"Wilson",email:"oliver.wilson@example.com",role:"Project manager",status:"Paused",lastActive:"Oct 18, 2026",added:1}
+const initialMembers = [
+{id:1,first:'Priya',last:'Sharma',email:'priya.sharma@northstar.example',role:'Administrator',status:'Active',lastActive:'Just now',added:8},
+{id:2,first:'Marcus',last:'Lee',email:'marcus.lee@northstar.example',role:'Project manager',status:'Active',lastActive:'12 min ago',added:7},
+{id:3,first:'Sofia',last:'Martinez',email:'sofia.martinez@northstar.example',role:'Designer',status:'Needs review',lastActive:'Yesterday',added:6},
+{id:4,first:'Noah',last:'Williams',email:'noah.williams@northstar.example',role:'Developer',status:'Active',lastActive:'1 hour ago',added:5},
+{id:5,first:'Amara',last:'Okafor',email:'amara.okafor@northstar.example',role:'Analyst',status:'Paused',lastActive:'Oct 20, 2026',added:4},
+{id:6,first:'Ethan',last:'Chen',email:'ethan.chen@northstar.example',role:'Developer',status:'Needs review',lastActive:'Oct 22, 2026',added:3},
+{id:7,first:'Isabella',last:'Rossi',email:'isabella.rossi@northstar.example',role:'Designer',status:'Active',lastActive:'3 hours ago',added:2},
+{id:8,first:'Oliver',last:'Brown',email:'oliver.brown@northstar.example',role:'Project manager',status:'Paused',lastActive:'Oct 18, 2026',added:1}
 ];
-
-let currentTab = "all";
-let currentPage = 1;
-const pageSize = 5;
-let editingId = null;
-let selectedId = null;
-let confirmAction = null;
-let exportRows = [];
-
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, ch => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[ch]);
+let members=[...initialMembers], currentTab='all', currentPage=1, selectedId=null, confirmAction=null, editingId=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(title,detail=''){const el=$('toast');el.innerHTML=`<b>${esc(title)}</b>${detail?`<small>${esc(detail)}</small>`:''}`;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
+function initials(m){return (m.first[0]+m.last[0]).toUpperCase()}
+function statusClass(s){return s==='Active'?'active':s==='Needs review'?'review':s==='Paused'?'paused':'blocked'}
+function filtered(){let q=$('searchInput').value.toLowerCase().trim(),role=$('roleFilter').value,sort=$('sortFilter').value;let arr=members.filter(m=>(currentTab==='all'||(currentTab==='review'?m.status==='Needs review':m.status.toLowerCase()===currentTab))&&(role==='all'||m.role===role)&&(!q||`${m.first} ${m.last} ${m.email} ${m.role}`.toLowerCase().includes(q)));if(sort==='name')arr.sort((a,b)=>(a.first+' '+a.last).localeCompare(b.first+' '+b.last));if(sort==='recent')arr.sort((a,b)=>b.added-a.added);if(sort==='status')arr.sort((a,b)=>a.status.localeCompare(b.status));return arr}
+function render(){let arr=filtered(),pageSize=5,totalPages=Math.max(1,Math.ceil(arr.length/pageSize));if(currentPage>totalPages)currentPage=totalPages;let page=arr.slice((currentPage-1)*pageSize,currentPage*pageSize);$('memberRows').innerHTML=page.length?page.map(m=>`<tr data-id="${m.id}"><td><input type="checkbox" class="rowSelect" value="${m.id}" aria-label="Select ${esc(m.first+' '+m.last)}"></td><td><div class="person"><div class="mini-avatar">${initials(m)}</div><div><b>${esc(m.first+' '+m.last)}</b><small>${esc(m.email)}</small></div></div></td><td>${esc(m.role)}</td><td><span class="pill ${statusClass(m.status)}">${esc(m.status)}</span></td><td>${esc(m.lastActive)}</td><td><div class="row-actions"><button data-action="view" data-id="${m.id}" aria-label="View ${esc(m.first)}">View</button><button data-action="more" data-id="${m.id}" aria-label="More actions for ${esc(m.first)}">•••</button></div></td></tr>`).join(''):`<tr><td colspan="6"><div class="empty">No members match your filters.<br><button class="btn small" style="margin-top:12px" onclick="resetFilters()">Clear filters</button></div></td></tr>`;
+$('resultSummary').textContent=`Showing ${page.length} of ${arr.length} matching members · ${members.length} total`; $('allCount').textContent=`(${members.length})`; $('statMembers').textContent=String(members.length);$('sidebarMemberCount').textContent=String(members.length);$('statPending').textContent=String(members.filter(m=>m.status==='Needs review').length).padStart(2,'0');$('pageNumbers').innerHTML=Array.from({length:totalPages},(_,i)=>`<button type="button" data-page="${i+1}" class="${currentPage===i+1?'current':''}" aria-label="Page ${i+1}" ${currentPage===i+1?'aria-current="page"':''}>${i+1}</button>`).join('');$('prevPage').disabled=currentPage===1;$('nextPage').disabled=currentPage===totalPages;$('selectAll').checked=page.length>0&&page.every(m=>document.querySelector(`.rowSelect[value="${m.id}"]`)?.checked);$('selectAll').indeterminate=false}
+function resetFilters(){ $('searchInput').value='';$('roleFilter').value='all';$('sortFilter').value='name';currentTab='all';currentPage=1;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab==='all'));render() }
+function openModal(member=null){editingId=member?member.id:null;$('modalTitle').textContent=member?'Edit team member':'Add team member';$('memberForm').reset();$('formError').style.display='none';$('formError').textContent='';if(member){$('firstName').value=member.first;$('lastName').value=member.last;$('email').value=member.email;$('role').value=member.role;$('status').value=member.status;$('sendInvite').checked=false}else{$('sendInvite').checked=true}$('memberModal').classList.add('open');setTimeout(()=>$('firstName').focus(),40)}
+function closeModal(){$('memberModal').classList.remove('open');editingId=null}
+function showDetail(id){let m=members.find(x=>x.id===id);if(!m)return;selectedId=id;$('detailTitle').textContent=m.first+' '+m.last;$('detailBody').innerHTML=`<div class="person" style="margin-bottom:22px"><div class="mini-avatar" style="width:48px;height:48px;font-size:15px">${initials(m)}</div><div><b>${esc(m.first+' '+m.last)}</b><small>${esc(m.email)}</small></div></div><div class="detail-list"><div><small>Role</small><b>${esc(m.role)}</b></div><div><small>Status</small><span class="pill ${statusClass(m.status)}">${esc(m.status)}</span></div><div><small>Last active</small><b>${esc(m.lastActive)}</b></div><div><small>Member ID</small><b>ATL-${String(m.id).padStart(4,'0')}</b></div></div><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><div><small class="muted">Workspace note</small><p style="margin-bottom:0">Profile data is sample content for browser-agent testing. No real invitation or account changes are made.</p></div>`;$('detailModal').classList.add('open')}
+function closeDetail(){$('detailModal').classList.remove('open')}
+function askConfirm(title,text,action,label='Confirm'){ $('confirmTitle').textContent=title;$('confirmText').textContent=text;$('acceptConfirm').textContent=label;confirmAction=action;$('confirmModal').classList.add('open')}
+function closeConfirm(){$('confirmModal').classList.remove('open');confirmAction=null}
+function selectedIds(){return [...document.querySelectorAll('.rowSelect:checked')].map(x=>Number(x.value))}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{currentTab=t.dataset.tab;currentPage=1;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));render()}));
+['searchInput','roleFilter','sortFilter'].forEach(id=>$(id).addEventListener(id==='searchInput'?'input':'change',()=>{currentPage=1;render()}));
+$('resetBtn').addEventListener('click',()=>{resetFilters();toast('Filters reset','Showing all team members.')});
+$('addBtn').addEventListener('click',()=>openModal());$('closeModal').addEventListener('click',closeModal);$('cancelModal').addEventListener('click',closeModal);
+$('memberModal').addEventListener('click',e=>{if(e.target===$('memberModal'))closeModal()});
+$('memberForm').addEventListener('submit',e=>{e.preventDefault();let form=e.currentTarget;let missing=[...form.querySelectorAll('[required]')].filter(el=>!String(el.value||'').trim());let invalidEmail=$('email').value.trim()&&!$('email').checkValidity();if(missing.length||invalidEmail){let labels=missing.map(el=>form.querySelector(`label[for="${el.id}"]`)?.textContent.replace(' *','')||el.name);$('formError').textContent=invalidEmail?'Please enter a valid work email address.':`Please complete required fields: ${labels.join(', ')}.`;$('formError').style.display='block';(missing[0]||$('email')).focus();return}let data=Object.fromEntries(new FormData(e.currentTarget).entries());let email=data.email.trim().toLowerCase();if(members.some(m=>m.email.toLowerCase()===email&&m.id!==editingId)){toast('Email already exists','Choose a unique work email.');$('email').focus();return}if(editingId){let m=members.find(x=>x.id===editingId);Object.assign(m,{first:data.firstName.trim(),last:data.lastName.trim(),email,role:data.role,status:data.status});toast('Member updated',`${m.first} ${m.last} changes saved locally.`)}else{let m={id:Math.max(0,...members.map(x=>x.id))+1,first:data.firstName.trim(),last:data.lastName.trim(),email,role:data.role,status:data.status||'Needs review',lastActive:'Never',added:Date.now()};members.unshift(m);currentTab='all';currentPage=1;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab==='all'));toast('Member added',`${m.first} ${m.last} ${$('sendInvite').checked?'invitation simulated':'added without an invitation'}.`)}closeModal();render()});
+$('memberRows').addEventListener('click',e=>{let b=e.target.closest('button[data-action]');if(!b)return;let id=Number(b.dataset.id),m=members.find(x=>x.id===id);if(b.dataset.action==='view')showDetail(id);else{selectedId=id;askConfirm('Member actions',`Choose an action for ${m.first} ${m.last}. The action will be applied only to this local test page.`,()=>{m.status=m.status==='Paused'?'Active':'Paused';render();toast('Status updated',`${m.first} ${m.last} is now ${m.status.toLowerCase()}.`)},m.status==='Paused'?'Activate member':'Pause member')}});
+$('closeDetail').addEventListener('click',closeDetail);$('detailCloseBtn').addEventListener('click',closeDetail);$('detailModal').addEventListener('click',e=>{if(e.target===$('detailModal'))closeDetail()});$('editFromDetail').addEventListener('click',()=>{let m=members.find(x=>x.id===selectedId);closeDetail();if(m)openModal(m)});
+$('closeConfirm').addEventListener('click',closeConfirm);$('cancelConfirm').addEventListener('click',closeConfirm);$('confirmModal').addEventListener('click',e=>{if(e.target===$('confirmModal'))closeConfirm()});$('acceptConfirm').addEventListener('click',()=>{let fn=confirmAction;closeConfirm();if(fn)fn()});
+$('selectAll').addEventListener('change',e=>document.querySelectorAll('.rowSelect').forEach(c=>c.checked=e.target.checked));
+$('memberRows').addEventListener('change',e=>{if(e.target.classList.contains('rowSelect')){let all=[...document.querySelectorAll('.rowSelect')];$('selectAll').checked=all.length>0&&all.every(x=>x.checked);$('selectAll').indeterminate=all.some(x=>x.checked)&&!$('selectAll').checked}});
+$('bulkBtn').addEventListener('click',()=>{let ids=selectedIds();if(!ids.length){toast('Select members first','Use the checkboxes to choose one or more members.');return}askConfirm('Bulk pause members',`Pause ${ids.length} selected member(s)? This only changes the local demo data.`,()=>{members.forEach(m=>{if(ids.includes(m.id))m.status='Paused'});render();toast('Bulk action complete',`${ids.length} member(s) paused.`)},'Pause selected')});
+$('prevPage').addEventListener('click',()=>{currentPage=Math.max(1,currentPage-1);render()});$('nextPage').addEventListener('click',()=>{let totalPages=Math.max(1,Math.ceil(filtered().length/5));currentPage=Math.min(totalPages,currentPage+1);render()});$('pageNumbers').addEventListener('click',e=>{const b=e.target.closest('button[data-page]');if(b){currentPage=Number(b.dataset.page);render()}});
+let exportRows=[];
+function csvText(rows){return '\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n')}
+function openExportPreview(){
+  let chosen=filtered();
+  exportRows=[['Name','Email','Role','Status','Last active'],...chosen.map(m=>[m.first+' '+m.last,m.email,m.role,m.status,m.lastActive])];
+  $('exportSummary').textContent=`${chosen.length} filtered member row(s) · ${currentTab==='all'?'All statuses':currentTab==='review'?'Needs review':currentTab[0].toUpperCase()+currentTab.slice(1)} tab`;
+  $('exportPreviewTable').innerHTML=exportRows.length>1?`<table><thead><tr>${exportRows[0].map(v=>`<th>${esc(v)}</th>`).join('')}</tr></thead><tbody>${exportRows.slice(1).map(row=>`<tr>${row.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`:'<div class="empty">No matching members to export.</div>';
+  $('downloadCsvBtn').disabled=exportRows.length<=1;
+  $('exportModal').classList.add('open');
 }
-function initials(member) {
-  return (member.first[0] + member.last[0]).toUpperCase();
-}
-function statusClass(status) {
-  if (status === "Active") return "active";
-  if (status === "Needs review") return "review";
-  if (status === "Paused") return "paused";
-  return "blocked";
-}
-function toast(title, message = "") {
-  const el = $("toast");
-  el.innerHTML = `<strong>${esc(title)}</strong>${message ? `<small>${esc(message)}</small>` : ""}`;
-  el.classList.add("show");
-  clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => el.classList.remove("show"), 3200);
-}
-function filtered() {
-  const q = $("searchInput").value.trim().toLowerCase();
-  const role = $("roleFilter").value;
-  const sort = $("sortFilter").value;
-
-  let result = members.filter(member => {
-    const statusMatches = currentTab === "all" ||
-      (currentTab === "review" ? member.status === "Needs review" : member.status.toLowerCase() === currentTab);
-    const roleMatches = role === "all" || member.role === role;
-    const searchMatches = !q ||
-      `${member.first} ${member.last} ${member.email} ${member.role}`.toLowerCase().includes(q);
-    return statusMatches && roleMatches && searchMatches;
-  });
-
-  if (sort === "name") result.sort((a,b) => `${a.first} ${a.last}`.localeCompare(`${b.first} ${b.last}`));
-  if (sort === "recent") result.sort((a,b) => b.added - a.added);
-  if (sort === "status") result.sort((a,b) => a.status.localeCompare(b.status));
-  return result;
-}
-function render() {
-  const result = filtered();
-  const totalPages = Math.max(1, Math.ceil(result.length / pageSize));
-  currentPage = Math.min(currentPage, totalPages);
-
-  const pageRows = result.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
-  $("memberRows").innerHTML = pageRows.length ? pageRows.map(member => `
-    <tr>
-      <td><input type="checkbox" class="rowSelect" value="${member.id}" aria-label="Select ${esc(member.first + " " + member.last)}"></td>
-      <td><div class="person">
-        <div class="mini-avatar">${initials(member)}</div>
-        <div><b>${esc(member.first + " " + member.last)}</b><small>${esc(member.email)}</small></div>
-      </div></td>
-      <td>${esc(member.role)}</td>
-      <td><span class="pill ${statusClass(member.status)}">${esc(member.status)}</span></td>
-      <td>${esc(member.lastActive)}</td>
-      <td><div class="row-actions">
-        <button data-action="view" data-id="${member.id}">View</button>
-        <button data-action="more" data-id="${member.id}" aria-label="More actions">•••</button>
-      </div></td>
-    </tr>`).join("") :
-    `<tr><td colspan="6"><div class="empty">No members match your filters.<br><button class="btn small" onclick="resetFilters()">Clear filters</button></div></td></tr>`;
-
-  $("resultSummary").textContent = `Showing ${pageRows.length} of ${result.length} matching members · ${members.length} total`;
-  $("allCount").textContent = `(${members.length})`;
-  $("statMembers").textContent = members.length;
-  $("statPending").textContent = String(members.filter(m => m.status === "Needs review").length).padStart(2, "0");
-
-  $("pageOne").classList.toggle("current", currentPage === 1);
-  $("pageTwo").classList.toggle("current", currentPage === 2);
-  $("pageOne").hidden = totalPages < 2;
-  $("pageTwo").hidden = totalPages < 2;
-  $("prevPage").disabled = currentPage === 1;
-  $("nextPage").disabled = currentPage === totalPages;
-  $("selectAll").checked = false;
-  $("selectAll").indeterminate = false;
-}
-function resetFilters() {
-  $("searchInput").value = "";
-  $("roleFilter").value = "all";
-  $("sortFilter").value = "name";
-  currentTab = "all";
-  currentPage = 1;
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.tab === "all"));
-  render();
-}
-function openMemberModal(member = null) {
-  editingId = member ? member.id : null;
-  $("memberForm").reset();
-  $("formError").style.display = "none";
-  $("formError").textContent = "";
-  $("modalTitle").textContent = member ? "Edit team member" : "Add team member";
-
-  if (member) {
-    $("firstName").value = member.first;
-    $("lastName").value = member.last;
-    $("email").value = member.email;
-    $("role").value = member.role;
-    $("status").value = member.status;
-    $("sendInvite").checked = false;
-  } else {
-    $("sendInvite").checked = true;
-  }
-  $("memberModal").classList.add("open");
-  setTimeout(() => $("firstName").focus(), 0);
-}
-function closeMemberModal() {
-  $("memberModal").classList.remove("open");
-  editingId = null;
-}
-function saveMember() {
-  const first = $("firstName").value.trim();
-  const last = $("lastName").value.trim();
-  const emailInput = $("email");
-  const email = emailInput.value.trim().toLowerCase();
-  const role = $("role").value;
-  const status = $("status").value;
-  const missing = [];
-
-  if (!first) missing.push("First name");
-  if (!last) missing.push("Last name");
-  if (!email) missing.push("Work email");
-  if (!role) missing.push("Role");
-
-  if (missing.length || (email && !emailInput.checkValidity())) {
-    $("formError").textContent = missing.length
-      ? `Please complete required fields: ${missing.join(", ")}.`
-      : "Please enter a valid work email address.";
-    $("formError").style.display = "block";
-    return;
-  }
-
-  const duplicate = members.some(member =>
-    member.email.toLowerCase() === email && member.id !== editingId
-  );
-  if (duplicate) {
-    $("formError").textContent = "Email already exists. Choose a unique work email.";
-    $("formError").style.display = "block";
-    emailInput.focus();
-    return;
-  }
-
-  if (editingId !== null) {
-    const member = members.find(item => item.id === editingId);
-    Object.assign(member, {first,last,email,role,status});
-    toast("Member updated", `${first} ${last} changes saved locally.`);
-  } else {
-    const member = {
-      id: Math.max(0, ...members.map(item => item.id)) + 1,
-      first,last,email,role,status,
-      lastActive:"Never",
-      added:Date.now()
-    };
-    members.unshift(member);
-    currentTab = "all";
-    currentPage = 1;
-    document.querySelectorAll(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.tab === "all"));
-    toast("Member added", `${first} ${last} ${$("sendInvite").checked ? "invitation simulated" : "added without an invitation"}.`);
-  }
-
-  closeMemberModal();
-  render();
-}
-function showDetails(id) {
-  const member = members.find(item => item.id === id);
-  if (!member) return;
-  selectedId = id;
-  $("detailTitle").textContent = `${member.first} ${member.last}`;
-  $("detailBody").innerHTML = `
-    <div class="person" style="margin-bottom:22px">
-      <div class="mini-avatar" style="width:48px;height:48px;font-size:15px">${initials(member)}</div>
-      <div><b>${esc(member.first + " " + member.last)}</b><small>${esc(member.email)}</small></div>
-    </div>
-    <div class="detail-list">
-      <div><small>Role</small><b>${esc(member.role)}</b></div>
-      <div><small>Status</small><b><span class="pill ${statusClass(member.status)}">${esc(member.status)}</span></b></div>
-      <div><small>Last active</small><b>${esc(member.lastActive)}</b></div>
-      <div><small>Member ID</small><b>ATL-${String(member.id).padStart(4,"0")}</b></div>
-    </div>
-    <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
-    <p class="muted">Sample data only. This page does not create real accounts or send invitations.</p>`;
-  $("detailModal").classList.add("open");
-}
-function closeDetails() {
-  $("detailModal").classList.remove("open");
-}
-function askConfirm(title, message, action, label = "Confirm") {
-  $("confirmTitle").textContent = title;
-  $("confirmText").textContent = message;
-  $("acceptConfirm").textContent = label;
-  confirmAction = action;
-  $("confirmModal").classList.add("open");
-}
-function closeConfirm() {
-  $("confirmModal").classList.remove("open");
-  confirmAction = null;
-}
-function selectedIds() {
-  return [...document.querySelectorAll(".rowSelect:checked")].map(input => Number(input.value));
-}
-function csvText(rows) {
-  return "\uFEFF" + rows.map(row =>
-    row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(",")
-  ).join("\r\n");
-}
-function openExportPreview() {
-  const chosen = filtered();
-  exportRows = [
-    ["Name","Email","Role","Status","Last active"],
-    ...chosen.map(member => [
-      `${member.first} ${member.last}`,member.email,member.role,member.status,member.lastActive
-    ])
-  ];
-
-  $("exportSummary").textContent = `${chosen.length} filtered member row(s) will be exported.`;
-  $("exportPreviewTable").innerHTML = exportRows.length > 1
-    ? `<table><thead><tr>${exportRows[0].map(value => `<th>${esc(value)}</th>`).join("")}</tr></thead>
-       <tbody>${exportRows.slice(1).map(row => `<tr>${row.map(value => `<td>${esc(value)}</td>`).join("")}</tr>`).join("")}</tbody></table>`
-    : `<div class="empty">No matching members to export.</div>`;
-
-  $("downloadCsvBtn").disabled = exportRows.length <= 1;
-  $("exportModal").classList.add("open");
-}
-function closeExportPreview() {
-  $("exportModal").classList.remove("open");
-}
-
-document.querySelectorAll(".tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    currentTab = tab.dataset.tab;
-    currentPage = 1;
-    document.querySelectorAll(".tab").forEach(item => item.classList.toggle("active", item === tab));
-    render();
-  });
-});
-["searchInput","roleFilter","sortFilter"].forEach(id => {
-  $(id).addEventListener(id === "searchInput" ? "input" : "change", () => {
-    currentPage = 1;
-    render();
-  });
-});
-$("resetBtn").addEventListener("click", () => {
-  resetFilters();
-  toast("Filters reset", "Showing all team members.");
-});
-$("addBtn").addEventListener("click", () => openMemberModal());
-$("closeModal").addEventListener("click", closeMemberModal);
-$("cancelModal").addEventListener("click", closeMemberModal);
-$("saveMember").addEventListener("click", saveMember);
-$("memberForm").addEventListener("submit", event => {
-  event.preventDefault();
-  saveMember();
-});
-$("memberModal").addEventListener("click", event => {
-  if (event.target === $("memberModal")) closeMemberModal();
-});
-
-$("memberRows").addEventListener("click", event => {
-  const button = event.target.closest("button[data-action]");
-  if (!button) return;
-  const id = Number(button.dataset.id);
-  const member = members.find(item => item.id === id);
-  if (!member) return;
-
-  if (button.dataset.action === "view") {
-    showDetails(id);
-  } else {
-    askConfirm(
-      "Member actions",
-      `Pause or activate ${member.first} ${member.last}?`,
-      () => {
-        member.status = member.status === "Paused" ? "Active" : "Paused";
-        render();
-        toast("Status updated", `${member.first} ${member.last} is now ${member.status.toLowerCase()}.`);
-      },
-      member.status === "Paused" ? "Activate member" : "Pause member"
-    );
-  }
-});
-$("closeDetail").addEventListener("click", closeDetails);
-$("detailCloseBtn").addEventListener("click", closeDetails);
-$("detailModal").addEventListener("click", event => {
-  if (event.target === $("detailModal")) closeDetails();
-});
-$("editFromDetail").addEventListener("click", () => {
-  const member = members.find(item => item.id === selectedId);
-  closeDetails();
-  if (member) openMemberModal(member);
-});
-
-$("closeConfirm").addEventListener("click", closeConfirm);
-$("cancelConfirm").addEventListener("click", closeConfirm);
-$("confirmModal").addEventListener("click", event => {
-  if (event.target === $("confirmModal")) closeConfirm();
-});
-$("acceptConfirm").addEventListener("click", () => {
-  const action = confirmAction;
-  closeConfirm();
-  if (action) action();
-});
-
-$("selectAll").addEventListener("change", event => {
-  document.querySelectorAll(".rowSelect").forEach(input => input.checked = event.target.checked);
-});
-$("memberRows").addEventListener("change", event => {
-  if (event.target.classList.contains("rowSelect")) {
-    const boxes = [...document.querySelectorAll(".rowSelect")];
-    $("selectAll").checked = boxes.length > 0 && boxes.every(input => input.checked);
-    $("selectAll").indeterminate = boxes.some(input => input.checked) && !$("selectAll").checked;
-  }
-});
-$("bulkBtn").addEventListener("click", () => {
-  const ids = selectedIds();
-  if (!ids.length) {
-    toast("Select members first", "Use the checkboxes to choose members.");
-    return;
-  }
-  askConfirm("Bulk pause members", `Pause ${ids.length} selected member(s)?`, () => {
-    members.forEach(member => {
-      if (ids.includes(member.id)) member.status = "Paused";
-    });
-    render();
-    toast("Bulk action complete", `${ids.length} member(s) paused.`);
-  }, "Pause selected");
-});
-
-$("prevPage").addEventListener("click", () => {
-  currentPage = Math.max(1, currentPage - 1);
-  render();
-});
-$("nextPage").addEventListener("click", () => {
-  currentPage = Math.min(Math.ceil(filtered().length / pageSize), currentPage + 1);
-  render();
-});
-$("pageOne").addEventListener("click", () => {
-  currentPage = 1;
-  render();
-});
-$("pageTwo").addEventListener("click", () => {
-  if (Math.ceil(filtered().length / pageSize) >= 2) {
-    currentPage = 2;
-    render();
-  }
-});
-
-$("exportBtn").addEventListener("click", openExportPreview);
-$("closeExport").addEventListener("click", closeExportPreview);
-$("cancelExport").addEventListener("click", closeExportPreview);
-$("exportModal").addEventListener("click", event => {
-  if (event.target === $("exportModal")) closeExportPreview();
-});
-$("downloadCsvBtn").addEventListener("click", () => {
-  if (exportRows.length <= 1) return;
-  const url = URL.createObjectURL(new Blob([csvText(exportRows)], {type:"text/csv;charset=utf-8;"}));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "atlas-team-directory.csv";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
-  const count = exportRows.length - 1;
+function closeExportPreview(){$('exportModal').classList.remove('open')}
+$('exportBtn').addEventListener('click',openExportPreview);
+$('closeExport').addEventListener('click',closeExportPreview);
+$('cancelExport').addEventListener('click',closeExportPreview);
+$('exportModal').addEventListener('click',e=>{if(e.target===$('exportModal'))closeExportPreview()});
+$('downloadCsvBtn').addEventListener('click',()=>{
+  if(exportRows.length<=1)return;
+  let url=URL.createObjectURL(new Blob([csvText(exportRows)],{type:'text/csv;charset=utf-8;'}));
+  let a=document.createElement('a');
+  a.href=url;a.download='atlas-team-directory.csv';a.style.display='none';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  let count=exportRows.length-1;
   closeExportPreview();
-  toast("CSV download started", `${count} row(s) · atlas-team-directory.csv`);
+  toast('CSV download started',`${count} member row(s) · atlas-team-directory.csv`);
 });
-
-document.querySelectorAll(".taskCheck").forEach(box => {
-  box.addEventListener("change", () => {
-    const all = [...document.querySelectorAll(".taskCheck")];
-    const done = all.filter(item => item.checked).length;
-    $("checkProgress").textContent = `${done} of ${all.length}`;
-    $("checkBar").style.width = `${done / all.length * 100}%`;
-    toast("Checklist updated", `${done} of ${all.length} setup tasks complete.`);
-  });
-});
-document.querySelectorAll("[data-nav]").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll("[data-nav]").forEach(item => item.classList.toggle("active", item === button));
-    $("crumbCurrent").textContent = button.dataset.nav;
-    $("pageTitle").textContent = button.dataset.nav === "Overview" ? "Workspace overview" : button.dataset.nav;
-    $("pageSubtitle").textContent = button.dataset.nav === "Overview"
-      ? "A live snapshot of your team, tasks, and workspace health."
-      : `Sample ${button.dataset.nav.toLowerCase()} view for agent navigation testing.`;
-    if (button.dataset.nav !== "Overview") toast("Navigation tested", `${button.dataset.nav} selected.`);
-  });
-});
-$("bellBtn").addEventListener("click", () => toast("Notifications", "You have 2 unread workspace notifications."));
-$("helpBtn").addEventListener("click", () => toast("Help center", "This is a local UI test fixture."));
-$("viewActivity").addEventListener("click", () => toast("Activity feed", "Showing the latest sample events."));
-$("menuBtn").addEventListener("click", () => toast("Navigation", "The sidebar is hidden at this screen size."));
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    const open = ["confirmModal","exportModal","memberModal","detailModal"]
-      .find(id => $(id).classList.contains("open"));
-    if (open) {
-      event.preventDefault();
-      if (open === "confirmModal") closeConfirm();
-      if (open === "exportModal") closeExportPreview();
-      if (open === "memberModal") closeMemberModal();
-      if (open === "detailModal") closeDetails();
-    }
-  }
-  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
-    event.preventDefault();
-    $("searchInput").focus();
-  }
-}, true);
-
+document.querySelectorAll('.taskCheck').forEach(c=>c.addEventListener('change',()=>{let all=[...document.querySelectorAll('.taskCheck')],done=all.filter(x=>x.checked).length;$('checkProgress').textContent=`${done} of ${all.length}`;$('checkBar').style.width=(done/all.length*100)+'%';toast('Checklist updated',`${done} of ${all.length} setup tasks complete.`)}));
+document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(x=>x.classList.toggle('active',x===b));$('crumbCurrent').textContent=b.dataset.nav;$('pageTitle').textContent=b.dataset.nav==='Overview'?'Workspace overview':b.dataset.nav;$('pageSubtitle').textContent=b.dataset.nav==='Overview'?'A live snapshot of your team, tasks, and workspace health.':`Sample ${b.dataset.nav.toLowerCase()} view for agent navigation testing.`;if(b.dataset.nav!=='Overview')toast('Navigation tested',`${b.dataset.nav} selected. This demo keeps all sections on one page.`)}));
+$('bellBtn').addEventListener('click',()=>toast('Notifications','You have 2 unread workspace notifications.'));$('helpBtn').addEventListener('click',()=>toast('Help center','This is a local UI test fixture. No external service is connected.'));$('viewActivity').addEventListener('click',()=>toast('Activity feed','Showing the latest four sample events.'));
+$('menuBtn').addEventListener('click',()=>toast('Navigation','On narrow screens, the sidebar is hidden in this demo.'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const stack=['confirmModal','exportModal','memberModal','detailModal'];const open=stack.find(id=>$(id).classList.contains('open'));if(open){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();if(open==='confirmModal')closeConfirm();else if(open==='exportModal')closeExportPreview();else if(open==='memberModal')closeModal();else if(open==='detailModal')closeDetail()}}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('searchInput').focus()}},true);
 render();
 </script>
 </body>
